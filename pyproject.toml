@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-repopack"
+version = "1.0.0"
+description = "Pack any git repository into clean, security-sanitized LLM prompt context with token counting."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+
+[project.scripts]
+repopack = "ai_repopack.cli:main"
+
+[project.optional-dependencies]
+tokens = ["tiktoken>=0.7.0"]
+
+[tool.setuptools]
+packages = ["ai_repopack"]

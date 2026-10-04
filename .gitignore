@@ -1,0 +1,6 @@
+dist/
+build/
+*.egg-info/
+__pycache__/
+*.db
+goals_data.json
