@@ -1,21 +1,23 @@
-# 📦 AI-Repopack
+# ai-repopack
 
-**Pack any repository into clean, security-sanitized context for Claude, ChatGPT, and Cursor.**
-
----
-
-## ⚡ Features
-
-- **Automated PII & Secret Redaction**: Automatically scrubs API keys, auth tokens, AWS credentials, and `.env` values before sending to LLMs.
-- **Token Estimation**: Built-in accurate OpenAI/Anthropic token counting.
-- **Smart Filtering**: Automatically ignores lockfiles, images, binaries, caches, and build artifacts.
-- **XML / Markdown Context Structure**: Industry-standard `<repository>` hierarchy with CDATA blocks to prevent prompt injection.
-
----
-
-## 🚀 Usage
+Pack a repository into one XML file for pasting into an LLM, with basic secret redaction.
 
 ```bash
-pip install .
+pip install ai-repopack            # token count is estimated as chars/4
+pip install "ai-repopack[tokens]"  # exact counts via tiktoken
 repopack . -o codebase.xml
+repopack ./src --max-size 100 --ignore "*.test.js"
 ```
+
+## What it does
+- Walks the repo, skips `.git`, `node_modules`, lockfiles, images/binaries, and files over `--max-size` KB (default 250)
+- **Skips `.env`, `.env.*`, `*.pem`, `*.key` and `id_rsa` entirely**
+- Redacts `api_key|secret|token|password|auth|bearer = "..."` assignments, `ghp_...`, `sk-...` and `AKIA...` keys inside other files
+- Wraps each file in `<![CDATA[ ]]>` under a `<repository>` tree
+
+## Limitations (v1)
+- Redaction is **regex-based and best-effort**: it will miss secrets in unusual formats. Review output before sharing.
+- Does not honour `.gitignore` yet (own ignore list + `--ignore` globs)
+- Token count is an estimate unless `tiktoken` is installed
+
+MIT licensed.
