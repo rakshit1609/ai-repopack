@@ -12,6 +12,11 @@ def estimate_tokens(text: str) -> int:
         return len(text) // 4
 
 def main():
+    for _s in (sys.stdout, sys.stderr):
+        try:
+            _s.reconfigure(errors="replace")
+        except Exception:
+            pass
     parser = argparse.ArgumentParser(description="AI-Repopack: Pack codebases into clean, sanitized LLM context.")
     parser.add_argument("path", nargs="?", default=".", help="Target repository directory (default: current dir)")
     parser.add_argument("-o", "--output", default="repopack_output.xml", help="Output destination file")
